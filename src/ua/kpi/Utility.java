@@ -17,7 +17,7 @@ public class Utility {
     }
 
     public static Map<List<Double>, Integer> getIntervals(List<Double> list) {
-        Map<List<Double>, Integer> intervalMap = new HashMap<>();
+        Map<List<Double>, Integer> intervalMap = new TreeMap<>(new ListDoubleComparator());
         double difference = list.stream().max(Comparator.comparing(Double::doubleValue)).get() / 20;
         double first = list.get(0);
         double last = first + difference;
@@ -27,21 +27,25 @@ public class Utility {
             last = first + difference;
             intervalMap.put(Arrays.asList(first, last), getNumberInInterval(list, first, last));
         }
-        //System.out.println(intervalMap.values().stream().mapToInt(item-> item).sum());
-        return intervalMap;
+
+        return checkIntervals(intervalMap);
     }
 
-//    private static void checkIntervals(Map<List<Double>, Integer> intervals) {
-//        Map<List<Double>, Integer> temp = new HashMap<>();
-//        for (int i = 0; i < intervals.size(); i++) {
-//            if ((new ArrayList<>(intervals.values()).get(i) <= 5)) {
-//                if (i == 0) {
-//    temp.add(new LinkedList<>())
-//                }
-//            }
-//
-//        }
-//    }
+    private static Map<List<Double>, Integer> checkIntervals(Map<List<Double>, Integer> intervals) {
+        Map<List<Double>, Integer> temp = new TreeMap<>( new ListDoubleComparator());
+        List<List<Double>> keys = new ArrayList<>(intervals.keySet());
+        List<Integer> values = new ArrayList<>(intervals.values());
+        for (int i = 0; i < intervals.size(); i++) {
+            if ((new ArrayList<>(intervals.values()).get(i) <= 5)) {
+               if(i+1<intervals.size()) {
+                   temp.put(Arrays.asList(keys.get(i).get(0),keys.get(i+1).get(1)), values.get(i) + values.get(i+1));
+                   i++;
+               }
+            }else temp.put(keys.get(i), values.get(i));
+
+        }
+        return temp;
+    }
 
     private static int getNumberInInterval(List<Double> list, double begin, double end) {
         return (int) list.stream().filter(item -> item >= begin && item <= end).count();
@@ -74,6 +78,7 @@ public class Utility {
         tableData.put(18, 28.9);
         tableData.put(19, 30.1);
         tableData.put(20, 31.4);
+        tableData.put(21, 32.7);
         return tableData;
     }
 }

@@ -17,16 +17,16 @@ public class Random3 {
         double c = Math.pow(2, 31);
 
         List<Double> resultList = new LinkedList<>();
+        double z =  a * Math.random() % c;
         for (int i = 0; i < 1000; i++) {
-            double z = Math.random();
 
-            z = (a * z) % c;
-            resultList.add((z / c));
-            System.out.printf("%5.2f%n", (z / c));
+            z = a * z % c;
+            resultList.add(Math.ceil((z / c) * 100) / 100);
+//            System.out.printf("%5.2f%n", (z / c));
         }
 
-        min = resultList.stream().min(Double::compare).get();
-        max = resultList.stream().max(Double::compare).get();
+        min = resultList.stream().mapToDouble(Double::doubleValue).min().getAsDouble();
+        max = resultList.stream().mapToDouble(Double::doubleValue).max().getAsDouble();
 
         Utility.printCharacteristics(resultList);
 
@@ -38,14 +38,13 @@ public class Random3 {
         List<Double> expectedList = new LinkedList<>();
 
         for (int i = 0; i < intervalList.size(); i++) {
-            System.out.println(";;;" + integrateExp(intervalList, i));
             expectedList.add(integrateExp(intervalList, i));
         }
         return expectedList;
     }
 
     public double integrateExp(List<List<Double>> intervalList, int i) {
-        return (intervalList.get(i).get(1) - intervalList.get(i).get(0)) / (max - min);
+        return ((intervalList.get(i).get(1) - intervalList.get(i).get(0)) / (max - min));
     }
 
     double xiSquare(int numberOfIntervals, List<Double> expectedList, List<Integer> frequencyList) {
@@ -60,12 +59,11 @@ public class Random3 {
         List<Double> inputList = random();
 
         Map<List<Double>, Integer> intervals = Utility.getIntervals(inputList);
-        System.out.println(intervals.values());
         List<Double> expectedList = getExpectedValues(intervals);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
         double observedXiSquare = xiSquare(intervals.size(), expectedList, observedList);
-        System.out.print(" ObservedXiSquare = " + observedXiSquare + ";");
+        System.out.print("ObservedXiSquare = " + observedXiSquare + ";");
         double expectedXiSquare = Utility.tableData.get(intervals.size() - 1);
         System.out.println(" ExpectedXiSquare = " + expectedXiSquare);
         System.out.println("result:" + (observedXiSquare < expectedXiSquare));
