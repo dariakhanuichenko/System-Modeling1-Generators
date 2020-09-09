@@ -2,6 +2,7 @@ package ua.kpi;
 
 import ua.kpi.functions.ExponentialFunction;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,11 @@ public class Random1 {
         List<Double> expectedList = getExpectedValues(intervals, average);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
+        try{
+        ExportToExcel.exportReportByLoadGeneralToExcel(intervals,1);}
+        catch(IOException e){
+            System.out.println("File (Generator1) wasn't written");
+        }
         double observedXiSquare = Utility.xiSquare(intervals.size(), expectedList, observedList);
         System.out.print("ObservedXiSquare = " + observedXiSquare + ";");
         double expectedXiSquare = Utility.tableData.get(intervals.size() - 1);

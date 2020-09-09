@@ -3,6 +3,7 @@ package ua.kpi;
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 import ua.kpi.functions.NormalFunction;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,12 @@ public class Random2 {
         List<Double> inputList = random();
 
         Map<List<Double>,Integer> intervals = Utility.getIntervals(inputList);
+
+        try{
+            ExportToExcel.exportReportByLoadGeneralToExcel(intervals,2);}
+        catch(IOException e){
+            System.out.println("File (Generator2) wasn't written");
+        }
 
         List<Double> expectedList = getExpectedValues(intervals);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());

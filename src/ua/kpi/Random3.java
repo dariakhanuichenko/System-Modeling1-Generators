@@ -1,6 +1,6 @@
 package ua.kpi;
 
-import javax.rmi.CORBA.Util;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Random3 {
         double c = Math.pow(2, 31);
 
         List<Double> resultList = new LinkedList<>();
-        double z =  a * Math.random() % c;
+        double z = a * Math.random() % c;
         for (int i = 0; i < 1000; i++) {
 
             z = a * z % c;
@@ -49,12 +49,18 @@ public class Random3 {
     }
 
 
-
     void analyse() {
         Utility.printName(3);
         List<Double> inputList = random();
 
         Map<List<Double>, Integer> intervals = Utility.getIntervals(inputList);
+
+        try {
+            ExportToExcel.exportReportByLoadGeneralToExcel(intervals, 3);
+        } catch (IOException e) {
+            System.out.println("File (Generator3) wasn't written");
+        }
+
         List<Double> expectedList = getExpectedValues(intervals);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
