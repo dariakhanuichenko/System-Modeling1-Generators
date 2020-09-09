@@ -1,4 +1,4 @@
-package ua.kpi;
+package ua.kpi.comparators;
 
 import java.util.Comparator;
 import java.util.List;

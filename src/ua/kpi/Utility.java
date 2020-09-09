@@ -1,5 +1,7 @@
 package ua.kpi;
 
+import ua.kpi.comparators.ListDoubleComparator;
+
 import java.util.*;
 
 public class Utility {
@@ -54,6 +56,18 @@ public class Utility {
     public static void printCharacteristics(List<Double> resultList) {
         System.out.println("average: " + Utility.getAverage(resultList));
         System.out.println("dispersion: " + Utility.getDispersion(resultList));
+    }
+
+    public static double xiSquare(int numberOfIntervals, List<Double> expectedList, List<Integer> frequencyList) {
+        double xi2 = 0;
+        for (int i = 0; i < numberOfIntervals; i++) {
+            xi2 += Math.pow(frequencyList.get(i) - 1000 * expectedList.get(i), 2) / (1000 * expectedList.get(i));
+        }
+        return xi2;
+    }
+
+    public static void printName(int number) {
+        System.out.println("---------GENERATOR " + number + "---------");
     }
 
     static Map<Integer, Double> initiasiseTableData() {

@@ -1,5 +1,7 @@
 package ua.kpi;
 
+import ua.kpi.functions.ExponentialFunction;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +24,7 @@ public class Random1 {
         for (int i = 0; i < 1000; i++) {
             psi = Math.random();
             resultList.addAll(Collections.singleton((-Math.log(psi) / lyamda)));
-            System.out.printf("%5.2f%n", (-Math.log(psi) / lyamda));
+//            System.out.printf("%5.2f%n", (-Math.log(psi) / lyamda));
         }
         this.average = Utility.getAverage(resultList);
 
@@ -45,15 +47,10 @@ public class Random1 {
         return exponentialFunction.value(intervalList.get(i).get(1)) - exponentialFunction.value(intervalList.get(i).get(0));
     }
 
-    double xiSquare(int numberOfIntervals, List<Double> expectedList, List<Integer> frequencyList) {
-        double xi2 = 0;
-        for (int i = 0; i < numberOfIntervals; i++) {
-            xi2 += Math.pow(frequencyList.get(i) - 1000 * expectedList.get(i), 2) / (1000 * expectedList.get(i));
-        }
-        return xi2;
-    }
 
     void analyse() {
+        Utility.printName(1);
+
         List<Double> inputList = random();
 
         Map<List<Double>, Integer> intervals = Utility.getIntervals(inputList);
@@ -61,11 +58,11 @@ public class Random1 {
         List<Double> expectedList = getExpectedValues(intervals, average);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
-        double observedXiSquare = xiSquare(intervals.size(), expectedList, observedList);
-        System.out.print(" ObservedXiSquare = " + observedXiSquare + ";");
+        double observedXiSquare = Utility.xiSquare(intervals.size(), expectedList, observedList);
+        System.out.print("ObservedXiSquare = " + observedXiSquare + ";");
         double expectedXiSquare = Utility.tableData.get(intervals.size() - 1);
         System.out.println(" ExpectedXiSquare = " + expectedXiSquare);
-        System.out.println("result:" + (observedXiSquare < expectedXiSquare));
+        System.out.println("result:" + (observedXiSquare < expectedXiSquare) +"\n");
 
     }
 

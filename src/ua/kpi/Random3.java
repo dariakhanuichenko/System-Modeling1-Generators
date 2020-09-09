@@ -1,5 +1,6 @@
 package ua.kpi;
 
+import javax.rmi.CORBA.Util;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,26 +44,21 @@ public class Random3 {
         return expectedList;
     }
 
-    public double integrateExp(List<List<Double>> intervalList, int i) {
+    private double integrateExp(List<List<Double>> intervalList, int i) {
         return ((intervalList.get(i).get(1) - intervalList.get(i).get(0)) / (max - min));
     }
 
-    double xiSquare(int numberOfIntervals, List<Double> expectedList, List<Integer> frequencyList) {
-        double xi2 = 0;
-        for (int i = 0; i < numberOfIntervals; i++) {
-            xi2 += Math.pow(frequencyList.get(i) - 1000 * expectedList.get(i), 2) / (1000 * expectedList.get(i));
-        }
-        return xi2;
-    }
+
 
     void analyse() {
+        Utility.printName(3);
         List<Double> inputList = random();
 
         Map<List<Double>, Integer> intervals = Utility.getIntervals(inputList);
         List<Double> expectedList = getExpectedValues(intervals);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
-        double observedXiSquare = xiSquare(intervals.size(), expectedList, observedList);
+        double observedXiSquare = Utility.xiSquare(intervals.size(), expectedList, observedList);
         System.out.print("ObservedXiSquare = " + observedXiSquare + ";");
         double expectedXiSquare = Utility.tableData.get(intervals.size() - 1);
         System.out.println(" ExpectedXiSquare = " + expectedXiSquare);

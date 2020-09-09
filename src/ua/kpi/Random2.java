@@ -1,6 +1,7 @@
 package ua.kpi;
 
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
+import ua.kpi.functions.NormalFunction;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class Random2 {
 
         for (int i = 0; i < 1000; i++) {
             resultList.addAll(Collections.singleton((mu * getM() + a)));
-            System.out.printf("%5.2f%n", (mu * getM() + a));
+//            System.out.printf("%5.2f%n", (mu * getM() + a));
         }
 
         Utility.printCharacteristics(resultList);
@@ -47,15 +48,10 @@ public class Random2 {
         return integrator.integrate(200, function,intervalList.get(i).get(0),intervalList.get(i).get(1));
     }
 
-    double xiSquare(int numberOfIntervals, List<Double> expectedList, List<Integer> frequencyList) {
-        double xi2=0;
-        for (int i = 0; i <numberOfIntervals ; i++) {
-            xi2+=Math.pow(frequencyList.get(i)-1000*expectedList.get(i),2)/(1000*expectedList.get(i));
-        }
-        return xi2;
-    }
 
     void analyse() {
+        Utility.printName(2);
+
         List<Double> inputList = random();
 
         Map<List<Double>,Integer> intervals = Utility.getIntervals(inputList);
@@ -63,11 +59,11 @@ public class Random2 {
         List<Double> expectedList = getExpectedValues(intervals);
         List<Integer> observedList = intervals.values().stream().map(Integer::new).collect(Collectors.toList());
 
-        double observedXiSquare = xiSquare(intervals.size(),expectedList,observedList);
-        System.out.print(" ObservedXiSquare = " +observedXiSquare + ";");
+        double observedXiSquare = Utility.xiSquare(intervals.size(),expectedList,observedList);
+        System.out.print("ObservedXiSquare = " +observedXiSquare + ";");
         double expectedXiSquare = Utility.tableData.get(intervals.size()-1);
         System.out.println(" ExpectedXiSquare = " +expectedXiSquare);
-        System.out.println("result:" +(observedXiSquare<expectedXiSquare));
+        System.out.println("result:" +(observedXiSquare<expectedXiSquare)+"\n");
 
     }
 }

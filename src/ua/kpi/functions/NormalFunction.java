@@ -1,4 +1,4 @@
-package ua.kpi;
+package ua.kpi.functions;
 
 import org.apache.commons.math3.analysis.UnivariateFunction;
 
